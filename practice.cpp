@@ -1,46 +1,52 @@
-#include<bits/stdc++.h>
+#include <iostream>
 using namespace std;
-struct vertex
+int sti(string x)
 {
-    int v,val;
-};
-bool comparator(vertex a,vertex b)
+	char ch;
+	int ans=0;
+	int p=1;
+	int d;
+	int l=x.length();
+	for(int i=l-1;i>=0;i--)
+	{
+		ch=x[i];
+		d=ch-'0';
+		ans+=d*p;
+		p*=10;
+	}
+	return ans;
+}
+void swap(string &x,int i,int j)
 {
-    if(a.val==b.val)
-    {
-        return (a.v<b.v);
-    }
-    else
-    {
-        return (a.val>b.val);
-    }
+	char temp=x[i];
+	x[i]=x[j];
+	x[j]=temp;
+}
+void swapMax(string x,int s,int &max,int c,int l,int h)
+{
+	if(l>=h)
+	return;
+	if(c==s)
+	{
+		if(sti(x)>max)
+		max=sti(x);
+		return;
+	}
+	for(int i=l;i<h;i++)
+	{
+		swap(x,l,i);
+		swapMax(x,s,max,c+1,l+1,h);
+		swap(x,l,i);
+	}
 }
 int main()
 {
-    int n,m,k,x,y;
-    cin>>n>>m>>k;
-    int val[n+1];
-    for(int i=1;i<=n;i++)
-    cin>>val[i];
-    vector<vector<vertex>>a(n+1);
-    while(--m>=0)
-    {
-        cin>>x>>y;
-        struct vertex temp1={y,val[y]};
-        struct vertex temp2={x,val[x]};
-        a[x].push_back(temp1);
-        a[y].push_back(temp2);
-    }
-    for(int i=1;i<=n;i++)
-    {
-        sort(a[i].begin(),a[i].end(),comparator);
-        //reverse(a[i].begin(),a[i].end());
-        if(a[i].size()<k-1)
-        cout<<-1<<endl;
-        else
-        {
-            cout<<a[i][k-1].v<<endl;
-        }
-    }
-    
+	int s;
+	string x;
+	cin>>x>>s;
+	
+	int l=x.length();
+	int max=-100000;
+	swapMax(x,s,max,0,0,l);
+	cout<<max;
 }
